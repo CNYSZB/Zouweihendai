@@ -3,323 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>走位很呆的相关作品</title>
+    <title>走位很呆的作品集</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-sub: #7f8c8d;
+            --accent-color: #3498db;
+            --jump-color: #e67e22; /* 跳转按钮使用橙色区分 */
+            --btn-shadow: rgba(0, 0, 0, 0.05);
         }
-        body {
-            background-color: #f0f7ff;
-            padding: 20px;
-            overflow-x: hidden;
-            position: relative;
+
+        .dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-sub: #a0a0a0;
+            --accent-color: #5dade2;
+            --jump-color: #f39c12;
+            --btn-shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+            padding: 20px 15px;
+            transition: background 0.3s;
             min-height: 100vh;
         }
-        body.dark-mode {
-            background-color: #1a1a1a;
-        }
-        .float-icon {
-            position: absolute;
-            font-size: 24px;
-            pointer-events: none;
-            opacity: 0.7;
-            z-index: 0;
-            animation: float linear infinite;
-        }
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
-            25% { transform: translate(10px, -10px) rotate(5deg); opacity: 0.8; }
-            50% { transform: translate(0, -20px) rotate(0deg); opacity: 0.9; }
-            75% { transform: translate(-10px, -10px) rotate(-5deg); opacity: 0.8; }
-            100% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
-        }
-        @keyframes fadeOutUp {
-            from { opacity: 0.7; transform: translate(0, 0); }
-            to { opacity: 0; transform: translate(0, -50px); }
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate(0, 50px); }
-            to { opacity: 0.7; transform: translate(0, 0); }
-        }
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
+
+        header { text-align: center; padding: 30px 0; }
+        h1 { font-size: 22px; font-weight: 800; opacity: 0.9; }
+
         .mode-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #fff;
-            border: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: all 0.3s;
+            position: fixed; top: 20px; right: 20px;
+            width: 40px; height: 40px; border-radius: 12px;
+            background: var(--card-bg); border: none;
+            box-shadow: 0 4px 12px var(--btn-shadow);
+            z-index: 100; font-size: 18px; display: flex; align-items: center; justify-content: center;
         }
-        .mode-toggle:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
+
+        .project-grid { max-width: 500px; margin: 0 auto; display: grid; gap: 20px; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: 0 10px 30px var(--btn-shadow);
         }
-        body.dark-mode .mode-toggle {
-            background-color: #333;
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+
+        .card-title { font-size: 17px; font-weight: 700; color: var(--accent-color); margin-bottom: 4px; }
+        .card-desc { font-size: 13px; color: var(--text-sub); line-height: 1.4; margin-bottom: 12px; }
+        .tech-note { color: #e74c3c; font-size: 11px; margin-bottom: 8px; font-weight: bold; }
+
+        .img-scroll {
+            display: flex; gap: 8px; overflow-x: auto;
+            margin-bottom: 12px; padding-bottom: 4px;
+            scrollbar-width: none;
         }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin: 30px 0 40px;
-            font-size: 28px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .img-scroll::-webkit-scrollbar { display: none; }
+        .img-scroll img { width: 140px; height: 90px; border-radius: 10px; object-fit: cover; background: #eee; }
+
+        .view-btn {
+            width: 100%; padding: 14px; background: var(--accent-color);
+            color: white; border: none; border-radius: 12px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
         }
-        body.dark-mode h1 {
-            color: #f0f0f0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+
+        .jump-btn { background: var(--jump-color); }
+
+        /* 预览窗口保持不变 */
+        #web-viewer {
+            position: fixed; inset: 0; background: var(--bg-color);
+            z-index: 9999; display: none; flex-direction: column;
         }
-        .btn-list {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+        .viewer-nav {
+            padding: 0 16px; height: 55px; background: var(--card-bg);
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .作品按钮 {
-            padding: 20px 15px;
-            background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
-            border: none;
-            border-radius: 16px;
-            text-align: center;
-            text-decoration: none;
-            color: #34495e;
-            font-size: 17px;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+        .close-btn {
+            background: #ff5f56; color: white; border: none;
+            padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: bold;
         }
-        body.dark-mode .作品按钮 {
-            background: linear-gradient(135deg, #333 0%, #222 100%);
-            color: #e0e0e0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .作品按钮::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.05), transparent);
-            transition: 0.5s;
-        }
-        body.dark-mode .作品按钮::after {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-        }
-        .作品按钮:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.15);
-        }
-        body.dark-mode .作品按钮:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-        .作品按钮:hover::after {
-            left: 100%;
-        }
-        .footer {
-            margin-top: 70px;
-            text-align: center;
-            padding-bottom: 30px;
-        }
-        .douyin-link {
-            display: inline-block;
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #fe2c55 0%, #ff5c8a 100%);
-            color: white;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 16px;
-            box-shadow: 0 5px 15px rgba(254, 44, 85, 0.3);
-            transition: all 0.3s;
-        }
-        body.dark-mode .douyin-link {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .douyin-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(254, 44, 85, 0.4);
-        }
+        #viewer-frame { flex: 1; border: none; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="mode-toggle" id="modeToggle">🌙</button>
-        <h1>走位很呆的作品</h1>
-        <div class="btn-list">
-            <a href="https://cnyszb.github.io/Xmap/Xmap2.html" class="作品按钮" target="_blank">Xmap🗺️</a>
-            <a href="https://cnyszb.github.io/Xmap/Xmap.html" class="作品按钮" target="_blank">Xmap2🗺️</a>
-            <a href="https://cnyszb.github.io/Xmap/Xmap3.html" class="作品按钮" target="_blank">Xmap3🗺️</a>
-            <a href="https://cnyszb.github.io/Xmap/Xmap4.html" class="作品按钮" target="_blank">Xmap4🗺️</a>
-            <a href="https://cnyszb.github.io/earth/%E5%9C%B0%E7%90%83%E5%A4%9A%E6%97%B6%E5%8C%BA%E6%A8%A1%E5%9E%8B.html" class="作品按钮" target="_blank">earth🌏</a>
-            <a href="https://cnyszb.github.io/map/Map.html" class="作品按钮" target="_blank">map🛰️</a>
-            <a href="https://cnyszb.github.io/Solarcny/" class="作品按钮" target="_blank">Solarcny☀️</a>
-            <a href="https://cnyszb.github.io/Stmap/114.html" class="作品按钮" target="_blank">Stmap🌎</a> <!-- 新增Stmap 114链接 -->
-            <a href="https://www.123912.com/s/0UFCTd-6DSGd" class="作品按钮" target="_blank">APP专区📱</a>
+
+    <button class="mode-toggle" id="modeToggle">🌙</button>
+
+    <header>
+        <h1>走位很呆的作品全集</h1>
+    </header>
+
+    <div class="project-grid" id="projectList"></div>
+
+    <div id="web-viewer">
+        <div class="viewer-nav">
+            <span id="viewer-title" style="font-weight: 700; font-size: 15px;">网页预览</span>
+            <button class="close-btn" onclick="closeViewer()">返回列表</button>
         </div>
-        <div class="footer">
-            <a href="https://www.douyin.com/user/MS4wLjABAAAAXoTjFKppbS98ZhYOlRIiWF9PvqVh1-kCTlNutO8FIh4?from_tab_name=main" class="douyin-link" target="_blank">我的抖音主页 🎵</a>
-        </div>
+        <iframe id="viewer-frame" allow="accelerometer; gyroscope; magnetometer" sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts"></iframe>
     </div>
 
     <script>
-        const modeToggle = document.getElementById('modeToggle');
-        const body = document.body;
-        const iconCount = 8;
-        let isDarkMode = false;
-        let isSwitching = false; // 防止重复切换的锁
+        const projects = [
+            { id: "Xmap2", title: "Xmap🗺️", desc: "基础版地图系统，效果中规中矩。", url: "https://cnyszb.github.io/Xmap/Xmap2.html", type: "embed" },
+            { id: "Xmap", title: "Xmap2🗺️", desc: "进阶版本，拥有村庄系统，但因性能优化仅适用于小范围地图。", url: "https://cnyszb.github.io/Xmap/Xmap.html", type: "embed" },
+            { id: "Xmap3", title: "Xmap3🗺️", desc: "无村庄系统版本，负载更轻，可用于展示中等规模的地形。", url: "https://cnyszb.github.io/Xmap/Xmap3.html", type: "embed" },
+            { id: "Xmap4", title: "Xmap4🗺️", desc: "专为自定义创作设计，可配合绘画软件导入并绘制专属国家边界。", url: "https://cnyszb.github.io/Xmap/Xmap4.html", type: "embed" },
+            { id: "earth", title: "earth🌏", desc: "地球多时区动态模型，实时模拟全球光影分布。", url: "https://cnyszb.github.io/earth/%E5%9C%B0%E7%90%83%E5%A4%9A%E6%97%B6%E5%8C%BA%E6%A8%A1%E5%9E%8B.html", type: "embed" },
+            { id: "map", title: "map🛰️", desc: "卫星地图入口。版本较旧，建议优先使用APP版。", url: "https://cnyszb.github.io/map/Map.html", type: "embed" },
+            { id: "Solarcny", title: "Solarcny☀️", desc: "太阳系运行模型，提供基础科普介绍与行星轨道展示。", url: "https://cnyszb.github.io/Solarcny/", type: "jump", note: "⚠️ 因技术兼容性原因，此作品需跳转访问以获得完整交互体验。" },
+            { id: "Stmap", title: "Stmap🗺️", desc: "星球生成系统，为3D建模与世界观设定（OC）提供视觉参考。", url: "https://cnyszb.github.io/Stmap/114.html", type: "embed" },
+            { id: "AppZone", title: "APP专区📱", desc: "提供各类由AI辅助自制的实用工具软件下载通道。", url: "https://www.123912.com/s/0UFCTd-6DSGd", type: "jump" }
+        ];
 
-        // 清除所有浮动图标
-        function clearAllIcons() {
-            const icons = document.querySelectorAll('.float-icon');
-            icons.forEach(icon => icon.remove());
-        }
+        const listEl = document.getElementById('projectList');
 
-        // 初始化亮模式太阳图标
-        function initSunIcons() {
-            clearAllIcons();
-            const suns = ['☀️', '🌞', '🌅', '🌇'];
-            for (let i = 0; i < iconCount; i++) {
-                createFloatIcon(suns[Math.floor(Math.random() * suns.length)], 'sun');
-            }
-        }
+        projects.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            // 如果是跳转类型，添加提醒文字
+            const noteHtml = p.note ? `<div class="tech-note">${p.note}</div>` : '';
+            const btnClass = p.type === 'jump' ? 'view-btn jump-btn' : 'view-btn';
+            const btnText = p.type === 'jump' ? '跳转打开网页' : '显示网页内容';
+            const btnAction = p.type === 'jump' ? `window.open('${p.url}', '_blank')` : `openViewer('${p.url}', '${p.title}')`;
 
-        // 创建浮动图标
-        function createFloatIcon(icon, type) {
-            const iconEl = document.createElement('div');
-            iconEl.className = `float-icon ${type}`;
-            iconEl.textContent = icon;
-            
-            const left = Math.random() * 100;
-            const top = Math.random() * 100;
-            const duration = 15 + Math.random() * 20;
-            const delay = Math.random() * 5;
-            
-            iconEl.style.left = `${left}%`;
-            iconEl.style.top = `${top}%`;
-            iconEl.style.animationDuration = `${duration}s`;
-            iconEl.style.animationDelay = `${delay}s`;
-            
-            document.body.appendChild(iconEl);
-        }
-
-        // 切换到暗模式
-        function switchToDarkMode() {
-            if (isSwitching) return;
-            isSwitching = true;
-            modeToggle.disabled = true; // 禁用按钮防止重复点击
-            
-            isDarkMode = true;
-            modeToggle.textContent = '☀️';
-            body.classList.add('dark-mode');
-            
-            // 清除所有太阳图标
-            const suns = document.querySelectorAll('.sun');
-            suns.forEach(sun => {
-                sun.style.animation = 'fadeOutUp 0.8s forwards';
-            });
-            
-            // 延迟添加月亮图标
-            setTimeout(() => {
-                clearAllIcons(); // 确保彻底清除旧图标
-                const moons = ['🌙', '🌔', '🌕', '🌖'];
-                for (let i = 0; i < iconCount; i++) {
-                    const moon = document.createElement('div');
-                    moon.className = 'float-icon moon';
-                    moon.textContent = moons[Math.floor(Math.random() * moons.length)];
-                    
-                    const left = Math.random() * 100;
-                    const top = Math.random() * 100;
-                    const duration = 15 + Math.random() * 20;
-                    
-                    moon.style.left = `${left}%`;
-                    moon.style.top = `${top}%`;
-                    moon.style.animation = 'fadeInDown 0.8s forwards';
-                    
-                    document.body.appendChild(moon);
-                    
-                    setTimeout(() => {
-                        moon.style.animation = `float ${duration}s linear infinite`;
-                    }, 800);
-                }
-                isSwitching = false;
-                modeToggle.disabled = false;
-            }, 800);
-        }
-
-        // 切换到亮模式
-        function switchToLightMode() {
-            if (isSwitching) return;
-            isSwitching = true;
-            modeToggle.disabled = true;
-            
-            isDarkMode = false;
-            modeToggle.textContent = '🌙';
-            body.classList.remove('dark-mode');
-            
-            // 清除所有月亮图标
-            const moons = document.querySelectorAll('.moon');
-            moons.forEach(moon => {
-                moon.style.animation = 'fadeOutUp 0.8s forwards';
-            });
-            
-            // 延迟添加太阳图标
-            setTimeout(() => {
-                clearAllIcons(); // 确保彻底清除旧图标
-                const suns = ['☀️', '🌞', '🌅', '🌇'];
-                for (let i = 0; i < iconCount; i++) {
-                    const sun = document.createElement('div');
-                    sun.className = 'float-icon sun';
-                    sun.textContent = suns[Math.floor(Math.random() * suns.length)];
-                    
-                    const left = Math.random() * 100;
-                    const top = Math.random() * 100;
-                    const duration = 15 + Math.random() * 20;
-                    
-                    sun.style.left = `${left}%`;
-                    sun.style.top = `${top}%`;
-                    sun.style.animation = 'fadeInDown 0.8s forwards';
-                    
-                    document.body.appendChild(sun);
-                    
-                    setTimeout(() => {
-                        sun.style.animation = `float ${duration}s linear infinite`;
-                    }, 800);
-                }
-                isSwitching = false;
-                modeToggle.disabled = false;
-            }, 800);
-        }
-
-        // 切换模式事件
-        modeToggle.addEventListener('click', () => {
-            if (isDarkMode) {
-                switchToLightMode();
-            } else {
-                switchToDarkMode();
-            }
+            card.innerHTML = `
+                <div class="card-title">${p.title}</div>
+                <div class="card-desc">${p.desc}</div>
+                ${noteHtml}
+                <div class="img-scroll">
+                    <img src="${p.id}1.png" onerror="this.src='https://via.placeholder.com/140x90?text=${p.id}+1'">
+                    <img src="${p.id}2.png" onerror="this.src='https://via.placeholder.com/140x90?text=${p.id}+2'">
+                    <img src="${p.id}3.png" onerror="this.src='https://via.placeholder.com/140x90?text=${p.id}+3'">
+                </div>
+                <button class="${btnClass}" onclick="${btnAction}">${btnText}</button>
+            `;
+            listEl.appendChild(card);
         });
 
-        // 初始化页面
-        initSunIcons();
+        function openViewer(url, title) {
+            const viewer = document.getElementById('web-viewer');
+            const frame = document.getElementById('viewer-frame');
+            frame.src = url;
+            document.getElementById('viewer-title').innerText = title;
+            viewer.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewer() {
+            document.getElementById('web-viewer').style.display = 'none';
+            document.getElementById('viewer-frame').src = 'about:blank';
+            document.body.style.overflow = 'auto';
+        }
+
+        const modeBtn = document.getElementById('modeToggle');
+        modeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            modeBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
     </script>
 </body>
 </html>
